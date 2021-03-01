@@ -16,16 +16,17 @@ current_path = "D:/Documents/Research Projects/Complex Networks Researches/Link 
 def experiment():
     # G = read_graph()
     
-    avg = "ag \t cn \t aa \t ra \t pa \t ja \t sa \t so \t hpi \t hdi \t llhn \t car \t AG_PA \n"
-    std = ""
+    models= ["ag","cn","aa","ra","pa","ja","sa","so","hpi","hdi","llhn","car","AG_PA"]
+    avg = []
+    std = []
     for j in range(13):
         res = []
         for i in range(10):
             res.append(approach1(G, j))
-        avg = avg + str(sum(res)/len(res)) + "\t"
-        std = std + str(statistics.stdev(res)) + "\t"
-    print(avg)
-    print(std)
+        avg.append(sum(res)/len(res))
+        std.append(statistics.stdev(res))
+    for i in range(len(avg)):
+        print ("{}\t{}\t{}".format(models[i], avg[i], std[i]))
     
 def read_graph():
     # U = input('u: undirected; *: directed')
@@ -142,21 +143,21 @@ def LP(gT, gP, a):
                 n = n + 1
             res.append([x,y,Sxy])
 
-    th = sum/n
-    print(th)
+    th = sum/(20*n)
     for x in res:
         if x[2]>=th:
             gD.add_edge(x[0], x[1])
     return gD
 
 def threshold(R):
-    t = []
-    f = []
+    tp = []
+    fp = []
     for x in R:
         if x[0]==1:
-            t.append(x[2])
+            tp.append(x[2])
         if x[1]==1:
-            f.append(x[2])
+            fp.append(x[2])
+    return tp, fp
     
 def compare(gD, gP, G):
     """Return edge u,v and TP, FP"""
